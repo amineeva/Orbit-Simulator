@@ -1,1 +1,1 @@
-# Creates visualizations from processed mole data
+# Creates visualizations from processed orbital simulation 
