@@ -1,8 +1,5 @@
 # Creates orbit objects, runs orbital simulation
 
-# TO-DO:
-# planet moons are satellite objects 
-# in OrbitalSimulation class how to print the name of the stellar system from stellar class when representing
 import math
 GRAVITATIONAL_CONSTANT = 6.67408*10**(-11)/149597870691**3 #m^3/kgs^2 -> AU/kgs^2 
 
@@ -59,7 +56,7 @@ class Star(SpaceObject):
         self.spectral_type = spectral_type
 
     def __repr__(self):
-        return f"{super().__repr__()}, luminosity: {self.distance_from_center} Watts, spectral type: {spectral_type}"
+        return f"{super().__repr__()}, luminosity: {self.luminosity} Watts, spectral type: {self.spectral_type}"
 
 
 class Planet(OrbitingObject):
@@ -68,29 +65,14 @@ class Planet(OrbitingObject):
 
     Attributes:
         planet_type: A string representing the type of planet (gaseous or rocky).
-        moons: A dictionary representing the moons (satellites) of the planet, key is name, value is period.
     """
 
     def __init__(self, name, radius, mass, start_x, start_y, start_z, distance_from_center, planet_type):
         super().__init__(name, radius, mass, start_x, start_y, start_z, distance_from_center)
         self.planet_type = planet_type
-        self.moons = {} 
 
     def __repr__(self):
         return f"{super().__repr__()}, planet type: {self.planet_type}"
-        
-    def add_moon(self, object):
-        """Allows user to add satellites to planet"""
-        if not isinstance(object, Satellite):
-            raise TypeError("The central object must be a Satellite.")
-        self.moons[object.name] = object
-
-    def moon_list(self):
-        """Returns string of all moons around planet."""
-        temp = " "
-        for name in self.moons.keys():
-            temp.append({name})
-        return f"Moons: {temp}"
 
 
 class Satellite(OrbitingObject): 
@@ -110,10 +92,81 @@ class Satellite(OrbitingObject):
     def __repr__(self):
         return f"{super().__repr__()}, lifetime: {self.lifetime} years, material: {self.material}"
     
-
-class StellarOrbitalSystem:
+class OrbitalSystem:
     """
-    Composition class, represents orbital system.
+    Parent composition class, represents all orbital systems, with a central object and orbiting objects.
+    
+    Attributes:
+        name: A string representing the name of the orbital sytem.
+        central_object: A central object representing the center of the orbit.
+        orbit_objects: A dictionary of orbiting objects / period within system - names are keys.
+    """
+    def __init__(self, name, central_object):
+        """Initialize the system with a single central object and an empty dictionary of orbiting objects."""
+        self.name = name
+        self.central_object = central_object
+        self.orbiting_objects = {} 
+    
+    def __repr__(self):
+        return f"System name: {self.name}, Central Object: {self.central_object}, Number of orbiting objects: {len(self.orbiting_objects)}"
+    
+    def orbiting_objects_list(self):
+        """Returns string of all orbiting objects in orbital system."""
+        temp = []
+        for name in self.orbiting_objects.keys():
+            temp.append(name)
+        return f"Orbiting Objects in {self.name}: {', '.join(temp)}"
+    
+    def add_orbiting_object(self, object):
+        """Allows user to add orbiting objects to system"""
+        self.orbiting_objects[object.name] = object
+    
+    def get_orbital_period(self, object_name):
+        """Returns the orbital period of an orbiting object in Earth years."""
+        object = self.orbiting_objects.get(object_name)
+        if object:
+            period = math.sqrt( (object.distance_from_center**3*4*math.pi**2)/(GRAVITATIONAL_CONSTANT*(object.mass + self.central_object.mass)) ) /31536000
+            return period
+        else:
+            raise ValueError(f"Object '{object_name}' not found in system.")
+
+    
+class PlanetaryOrbitalSystem(OrbitalSystem):
+    """
+    Compsition class, represents orbital systems around planets.
+
+    Attributes:
+        planet: A Planet object representing the planet at the center of the orbital system
+        moons: A dictionary representing the moons (satellites) of the planet, key is name, value is period.
+    """
+    def __init__(self, name, planet):
+        """Initialize the system with a single central star and an empty dictionary of orbiting objects."""
+        if not isinstance(planet, Planet):
+            raise TypeError("The central object must be a Planet.")
+        super().__init__(name, planet)
+        self.moons = {} 
+
+    def __repr__(self):
+        return f"System name: {self.name}, Central Object: {self.central_object}, Number of orbiting objects: {len(self.moons)}"
+    
+
+    def add_moon(self, object):
+        """Allows user to add satellites to planet"""
+        if not isinstance(object, Satellite):
+            raise TypeError("The orbiting object must be a Satellite.")
+        self.moons[object.name] = object
+
+    def moon_list(self):
+        """Returns string of all moons around planet."""
+        temp = []
+        for name in self.moons.keys():
+            temp.append(name)
+        return f"Moons in {self.name}: {', '.join(temp)}"
+    
+
+class StellarOrbitalSystem(OrbitalSystem):
+    """
+    Composition class, represents orbital system around stars.
 
     Attributes:
         name: A string representing the name of the orbital sytem.
@@ -124,33 +177,7 @@ class StellarOrbitalSystem:
         """Initialize the system with a single central star and an empty dictionary of orbiting objects."""
         if not isinstance(star, Star):
             raise TypeError("The central object must be a Star.")
-        self.name = name
-        self.star = star
-        self.orbiting_objects = {} 
-    
-    def __repr__(self):
-        return f"System name: {self.name}, Central Star: {self.star}, Number of orbiting objects: {len(self.orbiting_orbjects)}"
-    
-    def orbiting_objects_list(self):
-        """Returns string of all orbiting objects in orbital system."""
-        temp = " "
-        for name in self.orbiting_objects.keys():
-            temp.append({name})
-        return f"Orbiting Objects: {temp}"
-    
-    def add_orbiting_object(self, object):
-        """Allows user to add orbiting objects to system"""
-        self.orbiting_objects[object.name] = object
-    
-    def get_orbital_period(self, object_name):
-        """Returns the orbital period of an orbiting object in Earth years."""
-        object = self.orbiting_objects.get(object_name)
-        if object:
-            period = math.sqrt( (object.distance_from_center**3*4*math.pi**2)/(GRAVITATIONAL_CONSTANT*(object.mass + self.star.mass)) ) /31536000
-            return period
-        else:
-            raise ValueError(f"Object '{object_name}' not found in system.")
-
+        super().__init__(name, star)
 
 
 class OrbitSimulation:
