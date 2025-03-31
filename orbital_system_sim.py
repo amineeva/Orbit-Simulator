@@ -178,25 +178,3 @@ class StellarOrbitalSystem(OrbitalSystem):
         if not isinstance(star, Star):
             raise TypeError("The central object must be a Star.")
         super().__init__(name, star)
-
-
-class OrbitSimulation:
-    """
-    Creates instance of an orbital simulation from an orbital system instances. Runs the simulaiton.
-
-    Attributes:
-        sim_duration: Float representing length of simulation in years. 
-        timestep: Float representing length of simulation timestep in years.
-        system: StellarOrbitalSystem representing the system orbital system to simulate.
-
-    """
-    
-    def __init__(self, sim_duration, timestep, system):
-        self.sim_duration = sim_duration
-        self.timestep = timestep
-        self.system = system
-        if not isinstance(system, StellarOrbitalSystem):
-            raise TypeError("The system must be an Orbital System.")
-    
-    def __repr__(self):
-        return f"Sim duration: {self.sim_duration} years, Timestep: {self.timestep} years"
