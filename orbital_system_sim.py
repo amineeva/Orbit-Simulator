@@ -3,6 +3,7 @@
 import math
 GRAVITATIONAL_CONSTANT = 6.67408*10**(-11)/149597870691**3 #m^3/kgs^2 -> AU/kgs^2 
 
+
 class SpaceObject:
     """
     Represents an orbital object in space. Has subclasses Star, Planet, Satellite.
@@ -27,6 +28,7 @@ class SpaceObject:
     def __repr__(self):
         return f"SPACE OBJECT | Name: {self.name}, radius: {self.radius} km, mass: {self.mass} kg, x start: {self.start_x}, y start: {self.start_y}, z start: {self.start_z}"
     
+
 class OrbitingObject(SpaceObject):
     """
     Represents all orbiting objects.
@@ -41,6 +43,7 @@ class OrbitingObject(SpaceObject):
     
     def __repr__(self):
         return f"{super().__repr__()}, semi-major axis: {self.distance_from_center} AU"
+
 
 class Star(SpaceObject):
     """
@@ -92,6 +95,7 @@ class Satellite(OrbitingObject):
     def __repr__(self):
         return f"{super().__repr__()}, lifetime: {self.lifetime} years, material: {self.material}"
     
+
 class OrbitalSystem:
     """
     Parent composition class, represents all orbital systems, with a central object and orbiting objects.
@@ -129,8 +133,19 @@ class OrbitalSystem:
             return period
         else:
             raise ValueError(f"Object '{object_name}' not found in system.")
-
+        
+    def get_orbit_object_distance(self, object_name):
+        """Returns the distance from the central object to the orbital object in AU."""
+        object = self.orbiting_objects.get(object_name)
+        if len(self.orbiting_objects) == 0:
+            return "There are no orbiting objects in the system."
+        elif object:
+            distance = object_name.distance_from_center
+            return distance
+        else:
+            raise ValueError(f"Object '{object_name}' not found in system.")
     
+
 class PlanetaryOrbitalSystem(OrbitalSystem):
     """
     Compsition class, represents orbital systems around planets.
