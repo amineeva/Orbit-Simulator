@@ -1,9 +1,5 @@
 # Run project from this file
-from orbital_system_sim import Planet
-from orbital_system_sim import Satellite
-from orbital_system_sim import Star
-from orbital_system_sim import PlanetaryOrbitalSystem
-from orbital_system_sim import StellarOrbitalSystem
+from orbital_system_sim import Planet, Satellite, Star, PlanetaryOrbitalSystem, StellarOrbitalSystem
 import visualization
 
 # creating planets
