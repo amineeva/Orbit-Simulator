@@ -1,5 +1,6 @@
 # Run project from this file
 from orbital_system_sim import Planet, Satellite, Star, PlanetaryOrbitalSystem, StellarOrbitalSystem
+import simulate_orbits
 import visualization
 
 # creating planets
@@ -25,6 +26,14 @@ solar_system.add_orbiting_object(mercury_planet)
 
 print(solar_system)
 print(solar_system.orbiting_objects_list())
+
+print(solar_system.get_orbit_object_distance("Mercury"))
+
+# simulation testing
+#ss_planet_positions, ss_time = simulate_orbits.run_simulation(solar_system)
+
+#print(ss_planet_positions[:5])
+#print(ss_time[:5])
 
 
 
