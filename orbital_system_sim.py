@@ -133,7 +133,8 @@ class OrbitalSystem:
             return period
         elif isinstance(object, OrbitalSystem):
             # take the period from the central object 
-            pass
+            period = math.sqrt( (object.central_object.distance_from_center**3*4*math.pi**2)/(GRAVITATIONAL_CONSTANT*(object.central_object.mass + self.central_object.mass)) ) /31536000
+            return period
         else:
             raise ValueError(f"Object '{object_name}' not found in system.")
         
@@ -144,10 +145,9 @@ class OrbitalSystem:
             return "There are no orbiting objects in the system."
         elif isinstance(object, OrbitingObject):
             return object.distance_from_center
-        elif isinstance(object, OrbitalSystem):
-            pass
-            # need to calculate the distance from the central object of the orbiting system to the center of this current system
-            
+        elif isinstance(object, PlanetaryOrbitalSystem):
+            return object.central_object.distance_from_center
+
         else:
             raise ValueError(f"Object '{object_name}' not found in system.")
     
@@ -166,6 +166,9 @@ class PlanetaryOrbitalSystem(OrbitalSystem):
             raise TypeError("The central object must be a Planet.")
         super().__init__(name, planet)
         self.moons = {} 
+        self.start_x = planet.start_x
+        self.start_y = planet.start_y
+        self.start_z = planet.start_z
 
     def __repr__(self):
         return f"System name: {self.name}, Central Object: {self.central_object}, Number of orbiting objects: {len(self.moons)}"
