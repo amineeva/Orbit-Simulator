@@ -30,7 +30,7 @@ print(solar_system.orbiting_objects_list())
 print(solar_system.get_orbit_object_distance("Mercury"))
 
 # simulation testing
-#ss_planet_positions, ss_time = simulate_orbits.run_simulation(solar_system)
+ss_planet_positions, ss_time = simulate_orbits.run_simulation(solar_system)
 
 #print(ss_planet_positions[:5])
 #print(ss_time[:5])
