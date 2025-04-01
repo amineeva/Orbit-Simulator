@@ -1,7 +1,9 @@
 # Run project from this file
 from orbital_system_sim import Planet, Satellite, Star, PlanetaryOrbitalSystem, StellarOrbitalSystem
 import simulate_orbits
+import data_wrangling
 import visualization
+import pandas as pd
 
 # creating planets
 mercury_planet = Planet("Mercury", 100, 100, 0, 0, 0, 0.3, "rocky")
@@ -19,18 +21,42 @@ mars_system.add_moon(deimos_moon)
 # creating Sun
 sun = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
 
-# creating solar system
-solar_system = StellarOrbitalSystem("Solar System", sun)
-solar_system.add_orbiting_object(mars_system)
-solar_system.add_orbiting_object(mercury_planet)
+# solar system - PLANETS ONLY
+solar_system_p = StellarOrbitalSystem("Solar System", sun)
+solar_system_p.add_orbiting_object(mars_planet)
+solar_system_p.add_orbiting_object(mercury_planet)
 
-print(solar_system)
-print(solar_system.orbiting_objects_list())
+# print(solar_system_p)
+print(solar_system_p.orbiting_objects_list())
 
-print(solar_system.get_orbit_object_distance("Mercury"))
+# print(solar_system_p.get_orbit_object_distance("Mercury"))
 
 # simulation testing
-ss_planet_positions, ss_time = simulate_orbits.run_simulation(solar_system)
+ss_planet_positions, ss_time = simulate_orbits.run_simulation(solar_system_p)
+
+# printing dataframe
+ss_positions = data_wrangling.convert_simulation_to_dataframe(ss_planet_positions, ss_time)
+print(ss_positions)
+
+# plot simulation - ONLY PLANETS
+visualization.plot_object(ss_positions, "Mars") # one object within system
+visualization.plot_system(solar_system_p, ss_positions) #full system
+# visualization.plot_system(ss_positions, "Y_pos")
+# visualization.plot_system(ss_positions, "Z_pos")
+
+
+# # solar system - PLANETS AND ORBITAL SYSTEMS
+# solar_system = StellarOrbitalSystem("Solar System", sun)
+# solar_system.add_orbiting_object(mars_system)
+# solar_system.add_orbiting_object(mercury_planet)
+
+# print(solar_system)
+# print(solar_system.orbiting_objects_list())
+
+# print(solar_system.get_orbit_object_distance("Mercury"))
+
+# # simulation testing
+# ss_planet_positions, ss_time = simulate_orbits.run_simulation(solar_system)
 
 #print(ss_planet_positions[:5])
 #print(ss_time[:5])
