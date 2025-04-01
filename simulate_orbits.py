@@ -24,6 +24,7 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
     angular_velocities = {}
     orbit_radii = {}
     for orbit_object_name, orbit_object in orbiting_objects_dictionary.items():
+        # this is for the orbiting objects
         angular_velocities[orbit_object_name] = 2*math.pi/system.get_orbital_period(orbit_object_name)
 
         positions[orbit_object_name] = np.zeros((num_steps, 3))
@@ -33,6 +34,8 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
         velocities[orbit_object_name][0] = [0, 0, 0]
 
         orbit_radii[orbit_object_name] = system.get_orbit_object_distance(orbit_object_name)
+
+        # this is for the orbiting systems
 
     return positions, velocities, angular_velocities, orbit_radii
 
