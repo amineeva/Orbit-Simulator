@@ -39,8 +39,8 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
 
         # this is for the orbiting systems - but get_orbital_period should work for OrbitalSystem knstances as well
         # I think the issue here is creating empty dictionaries for each of the orbiting objects within the orbital systems orbiting the main system
-        elif isinstance(orbit_object, OrbitalSystem):
-            angular_velocities[orbit_object_name] = 2*math.pi/system.get_orbital_period(orbit_object_name)
+        elif isinstance(orbit_object, PlanetaryOrbitalSystem):
+            angular_velocities[orbit_object_name] = 2*math.pi/system.get_orbital_period(orbit_object_name) #taken care of in orbital_system_sim.py
 
             positions[orbit_object_name] = np.zeros((num_steps, 3))
             velocities[orbit_object_name] = np.zeros((num_steps, 3))
