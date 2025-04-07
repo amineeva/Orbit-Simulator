@@ -4,6 +4,7 @@ import simulate_orbits
 import data_wrangling
 import visualization
 import pandas as pd
+import numpy as np
 
 # test set-up
 mercury_planet = Planet("Mercury", 100, 100, 0, 0, 0, 0.3, "rocky") # creating planets
@@ -53,6 +54,13 @@ print("")
 print(solar_system.orbiting_objects_list())
 print("")
 print(phobos_moon)
+print("")
+sim_duration = 2
+timestep = 0.00273973*7
+time = np.linspace(0, sim_duration, round(sim_duration/timestep)) # time vector in years
+num_steps = len(time)
+positions, velocities, angular_velocities, orbit_radii = simulate_orbits.establish_simulation(solar_system, solar_system.orbiting_objects, time) 
+print(positions) #in its current state this stores the 'mars system' as one object, 'mercury' as one orbject
 
 # print(solar_system.get_orbit_object_distance("Mercury"))
 # print("")
