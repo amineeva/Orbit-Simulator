@@ -5,21 +5,15 @@ import data_wrangling
 import visualization
 import pandas as pd
 
-# creating planets
-mercury_planet = Planet("Mercury", 100, 100, 0, 0, 0, 0.3, "rocky")
+# test set-up
+mercury_planet = Planet("Mercury", 100, 100, 0, 0, 0, 0.3, "rocky") # creating planets
 mars_planet = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
-
-# creating Martian planet moons as satellite instances
-phobos_moon = Satellite("Phobos", 11, 0, 0, 0, 0, 6000, 100, "asteroid")
-deimos_moon = Satellite("Deimos", 11, 0, 0, 0, 0, 6000, 100, "asteroid")
-
-# creating Mars orbit system 
-mars_system = PlanetaryOrbitalSystem("Mars system", mars_planet)
-mars_system.add_moon(phobos_moon)
-mars_system.add_moon(deimos_moon)
-
-# creating Sun
-sun = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+phobos_moon = Satellite("Phobos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid") # creating Martian planet moons as satellite instances
+deimos_moon = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+mars_system = PlanetaryOrbitalSystem("Mars system", mars_planet) # creating Mars orbit system 
+mars_system.add_orbiting_object(phobos_moon)
+mars_system.add_orbiting_object(deimos_moon)
+sun = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type") # creating Sun
 
 # solar system - PLANETS ONLY
 solar_system_p = StellarOrbitalSystem("Solar System", sun)
@@ -52,21 +46,23 @@ solar_system.add_orbiting_object(mars_system)
 solar_system.add_orbiting_object(mercury_planet)
 print(mars_system)
 print("")
+print(mars_system.orbiting_objects_list())
+print("")
 print(solar_system)
 print("")
 print(solar_system.orbiting_objects_list())
 
-print(solar_system.get_orbit_object_distance("Mercury"))
-print("")
-print(solar_system.get_orbit_object_distance("Mars system"))
+# print(solar_system.get_orbit_object_distance("Mercury"))
+# print("")
+# print(solar_system.get_orbit_object_distance("Mars system"))
 
 # simulation testing
-ss_positions_system, ss_time_s = simulate_orbits.run_simulation(solar_system)
+# ss_positions_system, ss_time_s = simulate_orbits.run_simulation(solar_system)
 
-ss_positions_s = data_wrangling.convert_simulation_to_dataframe(ss_positions_system, ss_time_s)
-print(ss_positions_s["Object"].unique()) # I need the 'Mars System' to be split into all objects in the mars system
-visualization.plot_object(ss_positions_s, "Mars system") # one object within system
-visualization.plot_system(solar_system, ss_positions_s) #full system, default X position
-visualization.plot_system(solar_system, ss_positions_s, "Time", "Y_pos") # full system, set y position
+# ss_positions_s = data_wrangling.convert_simulation_to_dataframe(ss_positions_system, ss_time_s)
+# print(ss_positions_s["Object"].unique()) # I need the 'Mars System' to be split into all objects in the mars system
+# visualization.plot_object(ss_positions_s, "Mars system") # one object within system
+# visualization.plot_system(solar_system, ss_positions_s) #full system, default X position
+# visualization.plot_system(solar_system, ss_positions_s, "Time", "Y_pos") # full system, set y position
 
 
