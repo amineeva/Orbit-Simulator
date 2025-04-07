@@ -51,6 +51,8 @@ print("")
 print(solar_system)
 print("")
 print(solar_system.orbiting_objects_list())
+print("")
+print(phobos_moon)
 
 # print(solar_system.get_orbit_object_distance("Mercury"))
 # print("")

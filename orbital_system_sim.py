@@ -26,7 +26,7 @@ class SpaceObject:
         self.start_z = start_z
 
     def __repr__(self):
-        return f"SPACE OBJECT | Name: {self.name}, radius: {self.radius} km, mass: {self.mass} kg, x start: {self.start_x}, y start: {self.start_y}, z start: {self.start_z}"
+        return f"Name: {self.name}, radius: {self.radius} km, mass: {self.mass} kg, x start: {self.start_x}, y start: {self.start_y}, z start: {self.start_z}"
     
 
 class OrbitingObject(SpaceObject):
@@ -171,7 +171,7 @@ class PlanetaryOrbitalSystem(OrbitalSystem):
         self.start_z = planet.start_z
 
     def __repr__(self):
-        return f"System name: {self.name}, Central Object: {self.central_object}, Number of orbiting objects: {len(self.moons)}"
+        return f"System name: {self.name}, Central Object: {self.central_object}, Number of orbiting objects: {len(self.orbiting_objects)}"
     
 
     def add_orbiting_object(self, object):
@@ -182,10 +182,11 @@ class PlanetaryOrbitalSystem(OrbitalSystem):
 
     def orbiting_objects_list(self):
         """Returns string of all moons around planet."""
-        temp = []
+        moon_descriptions = []
         for name in self.orbiting_objects.keys():
-            temp.append(name)
-        return f"Moons in {self.name}: {', '.join(temp)}"
+            moon_distance = self.get_orbit_object_distance(name)
+            moon_descriptions.append(f"{name} ({moon_distance} AU)")
+        return f"Moons in {self.name}: {', '.join(moon_descriptions)}"
     
 
 class StellarOrbitalSystem(OrbitalSystem):
