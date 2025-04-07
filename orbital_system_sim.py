@@ -174,16 +174,16 @@ class PlanetaryOrbitalSystem(OrbitalSystem):
         return f"System name: {self.name}, Central Object: {self.central_object}, Number of orbiting objects: {len(self.moons)}"
     
 
-    def add_moon(self, object):
-        """Allows user to add satellites to planet"""
+    def add_orbiting_object(self, object):
+        """Allows user to add satellites to planetary system."""
         if not isinstance(object, Satellite):
             raise TypeError("The orbiting object must be a Satellite.")
-        self.moons[object.name] = object
+        super().add_orbiting_object(object)
 
-    def moon_list(self):
+    def orbiting_objects_list(self):
         """Returns string of all moons around planet."""
         temp = []
-        for name in self.moons.keys():
+        for name in self.orbiting_objects.keys():
             temp.append(name)
         return f"Moons in {self.name}: {', '.join(temp)}"
     
