@@ -50,6 +50,19 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
 
             orbit_radii[orbit_object_name] = system.get_orbit_object_distance(orbit_object_name)
 
+            for sub_orbit_object_name, sub_orbit_object in orbit_object.orbiting_objects_list():
+                # this is for the orbiting objects in orbital systems IN ORBIT 
+                if isinstance(sub_orbit_object, OrbitingObject):
+                    angular_velocities[sub_orbit_object_name] = 2*math.pi/system.get_orbital_period(sub_orbit_object_name)
+
+                    positions[sub_orbit_object_name] = np.zeros((num_steps, 3))
+                    velocities[sub_orbit_object_name] = np.zeros((num_steps, 3))
+
+                    positions[sub_orbit_object_name][0] = [sub_orbit_object.start_x, sub_orbit_object.start_y, sub_orbit_object.start_z]
+                    velocities[sub_orbit_object_name][0] = [0, 0, 0]
+
+                    orbit_radii[sub_orbit_object_name] = system.get_orbit_object_distance(sub_orbit_object_name)
+
     return positions, velocities, angular_velocities, orbit_radii
 
 def run_simulation(system, sim_duration = 2, timestep = 0.00273973*7):
