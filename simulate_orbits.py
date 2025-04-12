@@ -17,6 +17,7 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
         velocities: Dictionary for x, y, z velocities of each orbiting object
         angular_velocities: Dictionary for angular velocity of each orbiting object
         orbit_radii: Dictionary for distances between system center and each orbiting object
+        parent: Dictionary with parent of object - only applies to Orbital Systems within Orbital Systems
     """
     num_steps = len(time)
     # Dictionaries to store positions, velocities, angular velocities, orbital distance from system center to object
@@ -24,6 +25,7 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
     velocities = {}
     angular_velocities = {}
     orbit_radii = {}
+    parent = {}
     for orbit_object_name, orbit_object in orbiting_objects_dictionary.items():
         # this is for the orbiting objects
         if isinstance(orbit_object, OrbitingObject):
@@ -36,6 +38,8 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
             velocities[orbit_object_name][0] = [0, 0, 0]
 
             orbit_radii[orbit_object_name] = system.get_orbit_object_distance(orbit_object_name)
+
+            parent[orbit_object_name] = None
 
         elif isinstance(orbit_object, OrbitalSystem):
             # setting empty lists for central object of system
@@ -51,6 +55,8 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
 
             orbit_radii[central_object_name] = system.get_orbit_object_distance(central_object_name)
 
+            parent[orbit_object_name] = None
+            
             for sub_orbit_object_name, sub_orbit_object in orbit_object.orbiting_objects.items():
                 # this is for the orbiting objects in orbital systems IN ORBIT 
                 if isinstance(sub_orbit_object, OrbitingObject):
@@ -64,7 +70,9 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
 
                     orbit_radii[sub_orbit_object_name] = orbit_object.get_orbit_object_distance(sub_orbit_object_name)
 
-    return positions, velocities, angular_velocities, orbit_radii
+                    parent[orbit_object_name] = central_object_name
+
+    return positions, velocities, angular_velocities, orbit_radii, parent
 
 def run_simulation(system, sim_duration = 2, timestep = 0.00273973*7):
     """
