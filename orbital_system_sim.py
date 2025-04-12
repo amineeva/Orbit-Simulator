@@ -28,6 +28,9 @@ class SpaceObject:
     def __repr__(self):
         return f"Name: {self.name}, radius: {self.radius} km, mass: {self.mass} kg, x start: {self.start_x}, y start: {self.start_y}, z start: {self.start_z}"
     
+    def get_name(self):
+        """Returns name of the Space Object."""
+        return self.name
 
 class OrbitingObject(SpaceObject):
     """
@@ -147,9 +150,10 @@ class OrbitalSystem:
             return object.distance_from_center
         elif isinstance(object, PlanetaryOrbitalSystem):
             return object.central_object.distance_from_center
-
-        else:
-            raise ValueError(f"Object '{object_name}' not found in system.")
+        
+    def get_central_object(self):
+        """Returns the central object of the system"""
+        return self.central_object
     
 
 class PlanetaryOrbitalSystem(OrbitalSystem):

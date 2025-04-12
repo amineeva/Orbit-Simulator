@@ -37,23 +37,24 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
 
             orbit_radii[orbit_object_name] = system.get_orbit_object_distance(orbit_object_name)
 
-        # this is for the orbiting systems - but get_orbital_period should work for OrbitalSystem knstances as well
-        # I think the issue here is creating empty dictionaries for each of the orbiting objects within the orbital systems orbiting the main system
-        elif isinstance(orbit_object, PlanetaryOrbitalSystem):
-            angular_velocities[orbit_object_name] = 2*math.pi/system.get_orbital_period(orbit_object_name) #taken care of in orbital_system_sim.py
+        elif isinstance(orbit_object, OrbitalSystem):
+            # setting empty lists for central object of system
+            central_object = orbit_object.get_central_object()
+            central_object_name = central_object.get_name()
+            angular_velocities[central_object_name] = 2*math.pi/system.get_orbital_period(orbit_object_name) #taken care of in orbital_system_sim.py
 
-            positions[orbit_object_name] = np.zeros((num_steps, 3))
-            velocities[orbit_object_name] = np.zeros((num_steps, 3))
+            positions[central_object_name] = np.zeros((num_steps, 3))
+            velocities[central_object_name] = np.zeros((num_steps, 3))
 
-            positions[orbit_object_name][0] = [orbit_object.start_x, orbit_object.start_y, orbit_object.start_z]
-            velocities[orbit_object_name][0] = [0, 0, 0]
+            positions[central_object_name][0] = [central_object.start_x, central_object.start_y, central_object.start_z]
+            velocities[central_object_name][0] = [0, 0, 0]
 
-            orbit_radii[orbit_object_name] = system.get_orbit_object_distance(orbit_object_name)
+            orbit_radii[central_object_name] = system.get_orbit_object_distance(central_object_name)
 
-            for sub_orbit_object_name, sub_orbit_object in orbit_object.orbiting_objects_list():
+            for sub_orbit_object_name, sub_orbit_object in orbit_object.orbiting_objects.items():
                 # this is for the orbiting objects in orbital systems IN ORBIT 
                 if isinstance(sub_orbit_object, OrbitingObject):
-                    angular_velocities[sub_orbit_object_name] = 2*math.pi/system.get_orbital_period(sub_orbit_object_name)
+                    angular_velocities[sub_orbit_object_name] = 2*math.pi/orbit_object.get_orbital_period(sub_orbit_object_name)
 
                     positions[sub_orbit_object_name] = np.zeros((num_steps, 3))
                     velocities[sub_orbit_object_name] = np.zeros((num_steps, 3))
@@ -61,7 +62,7 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
                     positions[sub_orbit_object_name][0] = [sub_orbit_object.start_x, sub_orbit_object.start_y, sub_orbit_object.start_z]
                     velocities[sub_orbit_object_name][0] = [0, 0, 0]
 
-                    orbit_radii[sub_orbit_object_name] = system.get_orbit_object_distance(sub_orbit_object_name)
+                    orbit_radii[sub_orbit_object_name] = orbit_object.get_orbit_object_distance(sub_orbit_object_name)
 
     return positions, velocities, angular_velocities, orbit_radii
 

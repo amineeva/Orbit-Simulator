@@ -26,11 +26,11 @@ solar_system_p.add_orbiting_object(mercury_planet)
 
 # print(solar_system_p.get_orbit_object_distance("Mercury"))
 
-# simulation testing
-ss_planet_positions, ss_time_p = simulate_orbits.run_simulation(solar_system_p)
+# # simulation testing
+# ss_planet_positions, ss_time_p = simulate_orbits.run_simulation(solar_system_p)
 
-# printing dataframe
-ss_positions_p = data_wrangling.convert_simulation_to_dataframe(ss_planet_positions, ss_time_p)
+# # printing dataframe
+# ss_positions_p = data_wrangling.convert_simulation_to_dataframe(ss_planet_positions, ss_time_p)
 # print(ss_positions)
 
 # plot simulation - ONLY PLANETS, operational
@@ -60,7 +60,7 @@ timestep = 0.00273973*7
 time = np.linspace(0, sim_duration, round(sim_duration/timestep)) # time vector in years
 num_steps = len(time)
 positions, velocities, angular_velocities, orbit_radii = simulate_orbits.establish_simulation(solar_system, solar_system.orbiting_objects, time) 
-print(positions) #in its current state this stores the 'mars system' as one object, 'mercury' as one orbject
+print(positions.keys()) #in its current state this stores the 'mars system' as one object, 'mercury' as one orbject
 
 # print(solar_system.get_orbit_object_distance("Mercury"))
 # print("")
@@ -74,5 +74,6 @@ print(positions) #in its current state this stores the 'mars system' as one obje
 # visualization.plot_object(ss_positions_s, "Mars system") # one object within system
 # visualization.plot_system(solar_system, ss_positions_s) #full system, default X position
 # visualization.plot_system(solar_system, ss_positions_s, "Time", "Y_pos") # full system, set y position
+
 
 
