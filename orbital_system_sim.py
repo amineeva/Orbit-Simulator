@@ -126,7 +126,14 @@ class OrbitalSystem:
     
     def add_orbiting_object(self, object):
         """Allows user to add orbiting objects to system"""
-        self.orbiting_objects[object.name] = object
+        if isinstance(self.central_object, Planet) and isinstance(object, Star):
+            raise TypeError("A star cannot orbit a planet.")
+        elif isinstance(self.central_object, Satellite) and isinstance(object, Star):
+            raise TypeError("A star cannot orbit a satellite.")
+        elif isinstance(self.central_object, Satellite) and isinstance(object, Planet):
+            raise TypeError("A planet cannot orbit a satellite.")
+        else:
+            self.orbiting_objects[object.name] = object
     
     def get_orbital_period(self, object_name):
         """Returns the orbital period of an orbiting object in Earth years."""

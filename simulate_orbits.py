@@ -53,9 +53,9 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
             positions[central_object_name][0] = [central_object.start_x, central_object.start_y, central_object.start_z]
             velocities[central_object_name][0] = [0, 0, 0]
 
-            orbit_radii[central_object_name] = system.get_orbit_object_distance(central_object_name)
+            orbit_radii[central_object_name] = system.get_orbit_object_distance(orbit_object_name)
 
-            parent[orbit_object_name] = None
+            parent[central_object_name] = None
             
             for sub_orbit_object_name, sub_orbit_object in orbit_object.orbiting_objects.items():
                 # this is for the orbiting objects in orbital systems IN ORBIT 
@@ -70,7 +70,7 @@ def establish_simulation(system, orbiting_objects_dictionary, time):
 
                     orbit_radii[sub_orbit_object_name] = orbit_object.get_orbit_object_distance(sub_orbit_object_name)
 
-                    parent[orbit_object_name] = central_object_name
+                    parent[sub_orbit_object_name] = central_object_name
 
     return positions, velocities, angular_velocities, orbit_radii, parent
 
@@ -90,13 +90,26 @@ def run_simulation(system, sim_duration = 2, timestep = 0.00273973*7):
     """
     time = np.linspace(0, sim_duration, round(sim_duration/timestep)) # time vector in years
     num_steps = len(time)
-    positions, velocities, angular_velocities, orbit_radii = establish_simulation(system, system.orbiting_objects, time) 
+    positions, velocities, angular_velocities, orbit_radii, parent_relationship = establish_simulation(system, system.orbiting_objects, time) 
     # now we have a position, velocity dictionary for all orbiting objects with initial position conditions defined, have a time vector
-
     # looping through time
     for i in range(1, num_steps):
         for orbit_object in positions.keys():
-            positions[orbit_object][i, 0] = orbit_radii[orbit_object]*math.cos(angular_velocities[orbit_object]*time[i])
-            positions[orbit_object][i, 1] = orbit_radii[orbit_object]*math.sin(angular_velocities[orbit_object]*time[i]) 
-    
+            object_parent = parent_relationship.get(orbit_object)
+            if object_parent is None: #if just an Orbiting Object, then simulate as normal
+                positions[orbit_object][i, 0] = orbit_radii[orbit_object]*math.cos(angular_velocities[orbit_object]*time[i])
+                positions[orbit_object][i, 1] = orbit_radii[orbit_object]*math.sin(angular_velocities[orbit_object]*time[i]) 
+            else: # if the object is a part of a system
+                # get the parent system's simulated positions (ex: Earth around Sun)
+                parent_x = positions[object_parent][i, 0]
+                parent_y = positions[object_parent][i, 1]
+
+                # get child's simulated positions around parent (ex: Moon around Earth)
+                child_x = orbit_radii[orbit_object]*math.cos(angular_velocities[orbit_object]*time[i])
+                child_y = orbit_radii[orbit_object]*math.sin(angular_velocities[orbit_object]*time[i]) 
+
+                # add parent system's positions and child-around-parent positions to get child's positions (ex: Moon around Sun)
+                positions[orbit_object][i, 0] = parent_x + child_x
+                positions[orbit_object][i, 1] = parent_y + child_y
+
     return positions, time

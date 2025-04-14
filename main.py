@@ -1,5 +1,5 @@
 # Run project from this file
-from orbital_system_sim import Planet, Satellite, Star, PlanetaryOrbitalSystem, StellarOrbitalSystem
+from orbital_system_sim import SpaceObject, Planet, Satellite, Star, PlanetaryOrbitalSystem, StellarOrbitalSystem
 import simulate_orbits
 import data_wrangling
 import visualization
@@ -59,21 +59,27 @@ sim_duration = 2
 timestep = 0.00273973*7
 time = np.linspace(0, sim_duration, round(sim_duration/timestep)) # time vector in years
 num_steps = len(time)
-positions, velocities, angular_velocities, orbit_radii = simulate_orbits.establish_simulation(solar_system, solar_system.orbiting_objects, time) 
+positions, velocities, angular_velocities, orbit_radii, parent = simulate_orbits.establish_simulation(solar_system, solar_system.orbiting_objects, time) 
 print(positions.keys()) #in its current state this stores the 'mars system' as one object, 'mercury' as one orbject
+print(parent)
+print(angular_velocities)
+print(orbit_radii)
 
-# print(solar_system.get_orbit_object_distance("Mercury"))
-# print("")
-# print(solar_system.get_orbit_object_distance("Mars system"))
+print(solar_system.get_orbit_object_distance("Mercury"))
+print("")
+print(solar_system.get_orbit_object_distance("Mars system"))
 
 # simulation testing
-# ss_positions_system, ss_time_s = simulate_orbits.run_simulation(solar_system)
+ss_positions_system, ss_time_s = simulate_orbits.run_simulation(solar_system)
 
-# ss_positions_s = data_wrangling.convert_simulation_to_dataframe(ss_positions_system, ss_time_s)
-# print(ss_positions_s["Object"].unique()) # I need the 'Mars System' to be split into all objects in the mars system
-# visualization.plot_object(ss_positions_s, "Mars system") # one object within system
-# visualization.plot_system(solar_system, ss_positions_s) #full system, default X position
-# visualization.plot_system(solar_system, ss_positions_s, "Time", "Y_pos") # full system, set y position
+ss_positions_s = data_wrangling.convert_simulation_to_dataframe(ss_positions_system, ss_time_s)
+print(ss_positions_s["Object"].unique()) # Prints all unique objects in the solar system
+print(ss_positions_s[ss_positions_s["Object"] == "Mars"])
+print(ss_positions_s[ss_positions_s["Object"] == "Phobos"])
+visualization.plot_object(ss_positions_s, "Mars") # one object within system
+visualization.plot_object(ss_positions_s, "Phobos")
+visualization.plot_system(solar_system, ss_positions_s) #full system, default X position
+visualization.plot_system(solar_system, ss_positions_s, "Time", "Y_pos") # full system, set y position
 
 
 
