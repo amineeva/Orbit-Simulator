@@ -39,7 +39,13 @@ def test_orb_sys_onesatellite_onesatellite():
     """
     Check that valid orbital system created with one central satellite, one satellite orbiting
     """
-    pass
+    central_object = Satellite("Phobos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    orbiting_object = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object)
+
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Deimos"
+    
 
 def test_orb_sys_onesatellite_onestar():
     """
@@ -67,21 +73,36 @@ def test_orb_sys_onesatellite_oneplanet():
 
 def test_orb_sys_onestar_onestar():
     """
-    Check that valid orbital system created with one central satellite, one star orbiting
+    Check that valid orbital system created with one central star, one star orbiting
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object = Star("Proxima Centuari", 107292.36, 1.989e30*0.1221, 0, 0, 0, 3.828e26*0.0017, "Red Dwarf")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object)
+
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Proxima Centuari"
 
 def test_orb_sys_onestar_oneplanet():
     """
-    Check that valid orbital system created with one central satellite, one planet orbiting
+    Check that valid orbital system created with one central star, one planet orbiting
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object)
+
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Mars"
 
 def test_orb_sys_onestar_onesatellite():
     """
-    Check that valid orbital system created with one central satellite, one satellite orbiting
+    Check that valid orbital system created with one central star, one satellite orbiting
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object = Satellite("Phobos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object)
+
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Phobos"
 
 def test_valid_distance_from_center():
     """
