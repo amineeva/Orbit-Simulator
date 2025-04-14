@@ -5,11 +5,23 @@ def test_orb_sys_oneplanet_oneplanet():
     """
     Check that valid orbital system created with one central planet, one planet orbiting
     """
+    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    orbiting_object = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object)
+
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Earth"
 
 def test_orb_sys_oneplanet_onesatellite():
     """
     Check that valid orbital system created with one central planet, one satellite orbiting
     """
+    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    orbiting_object = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object)
+
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Deimos"
 
 def test_orb_sys_oneplanet_onestar():
     """
@@ -27,6 +39,7 @@ def test_orb_sys_onesatellite_onesatellite():
     """
     Check that valid orbital system created with one central satellite, one satellite orbiting
     """
+    pass
 
 def test_orb_sys_onesatellite_onestar():
     """
@@ -56,68 +69,82 @@ def test_orb_sys_onestar_onestar():
     """
     Check that valid orbital system created with one central satellite, one star orbiting
     """
+    pass
 
 def test_orb_sys_onestar_oneplanet():
     """
     Check that valid orbital system created with one central satellite, one planet orbiting
     """
+    pass
 
 def test_orb_sys_onestar_onesatellite():
     """
     Check that valid orbital system created with one central satellite, one satellite orbiting
     """
+    pass
 
 def test_valid_distance_from_center():
     """
     Check (when adding object) that orbital object distance_from_center values do not place object within radius of central object
     """
+    pass
 
 def test_valid_period():
     """
     Check that the period of objects around central objects is valid
     """
+    pass
 
 def test_space_object_get_name():
     """
     Check get_name function for SpaceObject class
     """
+    pass
 
 def test_orbital_system_orbiting_objects_list():
     """
     Check orbiting_objects_list function for OrbitalSystem class
     """
+    pass
 
 def test_orbital_system_add_orbiting_object():
     """
     Check add_orbiting_objects function for OrbitalSystem class
     """
+    pass
 
 def test_orbital_system_get_orbital_period():
     """
     Check get_orbital_period function for OrbitalSystem class
     """
+    pass
 
 def test_orbital_system_get_orbit_object_distance():
     """
     Check get_orbit_object_distance function for OrbitalSystem class
     """
+    pass
 
 def test_orbital_system_get_central_object():
     """
     Check get_central_object function for OrbitalSystem class
     """
+    pass
 
 def test_planetary_orbital_system_add_orbiting_object():
     """
     Check add_orbiting_object function for PlanetaryOrbitalSystem class
     """
+    pass
 
 def test_planetary_orbital_system_orbiting_objects_list():
     """
     Check orbiting_objects_list for PlanetaryOrbitalSystem class
     """
+    pass
 
 def test_stellar_orbital_system_init():
     """
     Check StellarOrbitalSystem initialization (central object is a Star)
     """
+    pass

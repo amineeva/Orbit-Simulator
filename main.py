@@ -1,5 +1,5 @@
 # Run project from this file
-from orbital_system_sim import SpaceObject, Planet, Satellite, Star, PlanetaryOrbitalSystem, StellarOrbitalSystem
+from orbital_system_sim import SpaceObject, Planet, Satellite, Star, OrbitalSystem, PlanetaryOrbitalSystem, StellarOrbitalSystem
 import simulate_orbits
 import data_wrangling
 import visualization
@@ -80,6 +80,3 @@ visualization.plot_object(ss_positions_s, "Mars") # one object within system
 visualization.plot_object(ss_positions_s, "Phobos")
 visualization.plot_system(solar_system, ss_positions_s) #full system, default X position
 visualization.plot_system(solar_system, ss_positions_s, "Time", "Y_pos") # full system, set y position
-
-
-
