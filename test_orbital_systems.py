@@ -104,11 +104,25 @@ def test_orb_sys_onestar_onesatellite():
 
     assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Phobos"
 
-def test_valid_distance_from_center():
+def test_invalid_distance_from_center(): #this test is expected to pass under the failure condition
     """
     Check (when adding object) that orbital object distance_from_center values do not place object within radius of central object
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 0.0004, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    with pytest.raises(ValueError, match="The distance between the orbiting object and the central object must be greater than the radius of the central object."):
+        system.add_orbiting_object(orbiting_object)
+
+def test_valid_distance_from_center(): #this test is expected to pass under the success condition
+    """
+    Check (when adding object) that orbital object distance_from_center values do not place object within radius of central object
+    """
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object)
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Earth"
 
 def test_valid_period():
     """

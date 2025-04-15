@@ -129,12 +129,14 @@ class OrbitalSystem:
     
     def add_orbiting_object(self, object):
         """Allows user to add orbiting objects to system"""
-        if isinstance(self.central_object, Planet) and isinstance(object, Star):
+        if isinstance(self.central_object, Planet) and isinstance(object, Star): #first three if/elifs check for instance compatability
             raise TypeError("A star cannot orbit a planet.")
         elif isinstance(self.central_object, Satellite) and isinstance(object, Star):
             raise TypeError("A star cannot orbit a satellite.")
         elif isinstance(self.central_object, Satellite) and isinstance(object, Planet):
             raise TypeError("A planet cannot orbit a satellite.")
+        elif self.central_object.radius >= object.distance_from_center*149597871: #converting distance_from_center AU -> km
+            raise ValueError("The distance between the orbiting object and the central object must be greater than the radius of the central object.")
         else:
             self.orbiting_objects[object.name] = object
     
