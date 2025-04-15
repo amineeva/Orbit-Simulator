@@ -128,19 +128,48 @@ def test_valid_period():
     """
     Check that the period of objects around central objects is valid
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object)
+    assert system.get_orbital_period("Earth") == 1.0005703560107866
 
-def test_space_object_get_name():
+def test_orbital_system_orbiting_objects_list_no_objects():
     """
-    Check get_name function for SpaceObject class
+    Check orbiting_objects_list function for OrbitalSystem class with 0 objects
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    system = OrbitalSystem("Test system", central_object)
+    assert system.orbiting_objects_list() == "There are no orbiting objects in the system."
 
-def test_orbital_system_orbiting_objects_list():
+def test_orbital_system_orbiting_objects_list_some_objects():
     """
-    Check orbiting_objects_list function for OrbitalSystem class
+    Check orbiting_objects_list function for OrbitalSystem class with 2 OrbitObjects
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object_1 = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+    orbiting_object_2 = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object_1)
+    system.add_orbiting_object(orbiting_object_2)
+    assert system.orbiting_objects_list() == "Orbiting objects in Test system: Earth, Mars"
+
+def test_orbital_system_orbiting_objects_list_orbital_systems():
+    """
+    Check orbiting_objects_list function for OrbitalSystem class with combined OrbitObject and OrbitalSystem instances
+    """
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object_1 = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+    orbiting_object_2 = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    mars_planet = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    phobos_moon = Satellite("Phobos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid") # creating Martian planet moons as satellite instances
+    deimos_moon = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    mars_system = PlanetaryOrbitalSystem("Mars system", mars_planet) # creating Mars orbit system 
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object_1)
+    system.add_orbiting_object(orbiting_object_2)
+    system.add_orbiting_object(mars_system)
+    assert system.orbiting_objects_list() == "Orbiting objects in Test system: Earth, Mars, Mars system"
 
 def test_orbital_system_add_orbiting_object():
     """

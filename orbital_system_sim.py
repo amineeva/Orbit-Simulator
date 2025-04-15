@@ -6,7 +6,7 @@ GRAVITATIONAL_CONSTANT = 6.67408*10**(-11)/149597870691**3 #m^3/kgs^2 -> AU/kgs^
 
 class SpaceObject:
     """
-    Represents an orbital object in space. Has subclasses Star, Planet, Satellite.
+    Represents an orbital object in space. Has subclasses OrbitingObject, Star, Planet, Satellite.
 
     Attributes:
         name: A string representing the name of the space object. 
@@ -125,7 +125,7 @@ class OrbitalSystem:
         if len(self.orbiting_objects) == 0:
             return "There are no orbiting objects in the system."
         else:
-            return f"Orbiting Objects in {self.name}: {', '.join(temp)}"
+            return f"Orbiting objects in {self.name}: {', '.join(temp)}"
     
     def add_orbiting_object(self, object):
         """Allows user to add orbiting objects to system"""
@@ -135,8 +135,11 @@ class OrbitalSystem:
             raise TypeError("A star cannot orbit a satellite.")
         elif isinstance(self.central_object, Satellite) and isinstance(object, Planet):
             raise TypeError("A planet cannot orbit a satellite.")
-        elif self.central_object.radius >= object.distance_from_center*149597871: #converting distance_from_center AU -> km
-            raise ValueError("The distance between the orbiting object and the central object must be greater than the radius of the central object.")
+        elif isinstance(object, OrbitingObject):
+            if self.central_object.radius >= object.distance_from_center*149597871: #converting distance_from_center AU -> km
+                raise ValueError("The distance between the orbiting object and the central object must be greater than the radius of the central object.")
+            else:
+                self.orbiting_objects[object.name] = object
         else:
             self.orbiting_objects[object.name] = object
     
