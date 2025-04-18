@@ -135,7 +135,19 @@ class OrbitalSystem:
             raise TypeError("A star cannot orbit a satellite.")
         elif isinstance(self.central_object, Satellite) and isinstance(object, Planet):
             raise TypeError("A planet cannot orbit a satellite.")
-        elif isinstance(object, OrbitingObject):
+        if object.name in self.orbiting_objects:
+            correct = input("You already have an object with the same name in this system. Enter 1 to replace and 2 to cancel.")
+            if correct == "1":
+                self.orbiting_objects[object.name] = object
+                print("Original replaced")
+                return None
+            elif correct == "2":
+                print("Canceled")
+                return None
+            else:
+                print("Invalid input. Please try again.")
+                return None
+        if isinstance(object, OrbitingObject):
             if self.central_object.radius >= object.distance_from_center*149597871: #converting distance_from_center AU -> km
                 raise ValueError("The distance between the orbiting object and the central object must be greater than the radius of the central object.")
             else:
@@ -154,7 +166,7 @@ class OrbitalSystem:
             period = math.sqrt( (object.central_object.distance_from_center**3*4*math.pi**2)/(GRAVITATIONAL_CONSTANT*(object.central_object.mass + self.central_object.mass)) ) /31536000
             return period
         else:
-            raise ValueError(f"Object '{object_name}' not found in system.")
+            raise ValueError(f"Object {object_name} not found in system.")
         
     def get_orbit_object_distance(self, object_name):
         """Returns the distance from the central object to the orbital object in AU."""
