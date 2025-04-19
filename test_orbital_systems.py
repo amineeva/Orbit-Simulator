@@ -1,5 +1,6 @@
 from orbital_system_sim import SpaceObject, Planet, Satellite, Star, OrbitalSystem, PlanetaryOrbitalSystem, StellarOrbitalSystem
 import pytest
+from unittest.mock import patch
 
 def test_orb_sys_oneplanet_oneplanet():
     """
@@ -10,7 +11,7 @@ def test_orb_sys_oneplanet_oneplanet():
     system = OrbitalSystem("Test system", central_object)
     system.add_orbiting_object(orbiting_object)
 
-    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Earth"
+    assert system.orbiting_objects_list() == "Orbiting objects in Test system: Earth"
 
 def test_orb_sys_oneplanet_onesatellite():
     """
@@ -21,7 +22,7 @@ def test_orb_sys_oneplanet_onesatellite():
     system = OrbitalSystem("Test system", central_object)
     system.add_orbiting_object(orbiting_object)
 
-    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Deimos"
+    assert system.orbiting_objects_list() == "Orbiting objects in Test system: Deimos"
 
 def test_orb_sys_oneplanet_onestar():
     """
@@ -297,51 +298,25 @@ def test_planetary_orbital_system_oneplanet_onestar():
     with pytest.raises(TypeError, match="The orbiting object must be a Satellite."):
         system.add_orbiting_object(orbiting_object)
 
-def test_planetary_orbital_system_oneplanet_onestar():
-    """
-    Check add_orbiting_object function for PlanetaryOrbitalSystem class, one planet - one star
-    """
-    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
-    orbiting_object = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
-    system = PlanetaryOrbitalSystem("Test system", central_object)
-    
-    with pytest.raises(TypeError, match="The orbiting object must be a Satellite."):
-        system.add_orbiting_object(orbiting_object)
-
 def test_planetary_orbital_system_oneplanet_onesatellite():
     """
     Check that valid orbital system created with one central planet, one satellite orbiting
     """
     central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
     orbiting_object = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
-    system = OrbitalSystem("Test system", central_object)
+    system = PlanetaryOrbitalSystem("Test system", central_object)
     system.add_orbiting_object(orbiting_object)
 
-    assert system.orbiting_objects_list() == "Moons in Mars system: Deimos (4.011e-05 AU)"
-
-def test_orb_sys_oneplanet_onestar():
-    """
-    Check that orbital system NOT created with one central planet, one star orbiting
-    """
-    # Define objects
-    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
-    orbiting_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
-    system = OrbitalSystem("Test system", central_object)
-    # Try the illegal thing
-    with pytest.raises(TypeError, match="A star cannot orbit a planet."):
-        system.add_orbiting_object(orbiting_object)
-
-def test_planetary_orbital_system_orbiting_objects_list():
-    """
-    Check orbiting_objects_list for PlanetaryOrbitalSystem class
-    """
-    pass
+    assert system.orbiting_objects_list() == "Moons in Test system: Deimos (4.011e-05 AU)"
 
 def test_stellar_orbital_system_init():
     """
     Check StellarOrbitalSystem initialization (central object is a Star)
     """
-    pass
+    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    
+    with pytest.raises(TypeError, match = "The central object must be a Star."):
+        StellarOrbitalSystem("Test system", central_object)
 
 def test_add_same_object():
     """
@@ -352,5 +327,9 @@ def test_add_same_object():
     orbiting_object_2 = Planet("Earth", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
     system = OrbitalSystem("Test system", central_object)
     system.add_orbiting_object(orbiting_object_1)
-    result = system.add_orbiting_object(orbiting_object_2)
-    assert result == "You already have an object with the same name in this system. Enter 1 to replace and 2 to cancel."
+    with patch("builtins.input", return_value="1") as mock_input:
+        with patch("builtins.print") as mocked_print:
+            result = system.add_orbiting_object(orbiting_object_2)
+            mocked_print.assert_called_with("Original replaced")
+            mock_input.assert_called_with("You already have an object with the same name in this system. Enter 1 to replace and 2 to cancel.")
+    assert system.orbiting_objects[orbiting_object_2.name] == orbiting_object_2
