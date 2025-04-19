@@ -31,7 +31,6 @@ import visualization
 
 central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
 orbiting_object_1 = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
-orbiting_object_2 = Planet("Earth", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
 system = OrbitalSystem("Test system", central_object)
-system.add_orbiting_object(orbiting_object_1)
-system.add_orbiting_object(orbiting_object_2)
+# system.add_orbiting_object(orbiting_object_1)
+print(system.get_orbital_period("Mars"))

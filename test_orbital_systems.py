@@ -175,7 +175,31 @@ def test_orbital_system_get_orbital_period():
     """
     Check get_orbital_period function for OrbitalSystem class
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object_1 = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object_1)
+    assert system.get_orbital_period("Earth") == 1.0005703560107866
+
+def test_orbital_system_get_orbital_period_invalid():
+    """
+    Check get_orbital_period function for OrbitalSystem class - getting period for object not in orbiting list
+    """
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object_1 = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object_1)
+    with pytest.raises(ValueError, match="Object Mars not found in system."):
+        system.get_orbital_period("Mars")
+
+def test_orbital_system_get_orbital_period_no_orbiting_object():
+    """
+    Check get_orbital_period function for OrbitalSystem class - no objects in orbiting list 
+    """
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    system = OrbitalSystem("Test system", central_object)
+    with pytest.raises(ValueError, match="Object Mars not found in system."):
+        system.get_orbital_period("Mars")
 
 def test_orbital_system_get_orbit_object_distance():
     """
