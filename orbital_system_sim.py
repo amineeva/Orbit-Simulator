@@ -125,7 +125,7 @@ class OrbitalSystem:
         if len(self.orbiting_objects) == 0:
             return "There are no orbiting objects in the system."
         else:
-            return f"Orbiting objects in {self.name}: {', '.join(temp)}"
+            return f"Orbiting Objects in {self.name}: {', '.join(temp)}"
     
     def add_orbiting_object(self, object):
         """Allows user to add orbiting objects to system"""

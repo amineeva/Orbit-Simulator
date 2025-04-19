@@ -11,7 +11,7 @@ def test_orb_sys_oneplanet_oneplanet():
     system = OrbitalSystem("Test system", central_object)
     system.add_orbiting_object(orbiting_object)
 
-    assert system.orbiting_objects_list() == "Orbiting objects in Test system: Earth"
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Earth"
 
 def test_orb_sys_oneplanet_onesatellite():
     """
@@ -22,7 +22,7 @@ def test_orb_sys_oneplanet_onesatellite():
     system = OrbitalSystem("Test system", central_object)
     system.add_orbiting_object(orbiting_object)
 
-    assert system.orbiting_objects_list() == "Orbiting objects in Test system: Deimos"
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Deimos"
 
 def test_orb_sys_oneplanet_onestar():
     """
@@ -99,18 +99,18 @@ def test_orb_sys_onestar_onesatellite():
     Check that valid orbital system created with one central star, one satellite orbiting
     """
     central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
-    orbiting_object = Satellite("Phobos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    orbiting_object = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
     system = OrbitalSystem("Test system", central_object)
     system.add_orbiting_object(orbiting_object)
 
-    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Phobos"
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Earth"
 
 def test_invalid_distance_from_center(): #this test is expected to pass under the failure condition
     """
     Check (when adding object) that orbital object distance_from_center values do not place object within radius of central object
     """
     central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
-    orbiting_object = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 0.0004, "rocky")
+    orbiting_object = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
     system = OrbitalSystem("Test system", central_object)
     with pytest.raises(ValueError, match="The distance between the orbiting object and the central object must be greater than the radius of the central object."):
         system.add_orbiting_object(orbiting_object)
@@ -153,7 +153,7 @@ def test_orbital_system_orbiting_objects_list_some_objects():
     system = OrbitalSystem("Test system", central_object)
     system.add_orbiting_object(orbiting_object_1)
     system.add_orbiting_object(orbiting_object_2)
-    assert system.orbiting_objects_list() == "Orbiting objects in Test system: Earth, Mars"
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Earth, Mars"
 
 def test_orbital_system_orbiting_objects_list_orbital_systems():
     """
@@ -170,7 +170,7 @@ def test_orbital_system_orbiting_objects_list_orbital_systems():
     system.add_orbiting_object(orbiting_object_1)
     system.add_orbiting_object(orbiting_object_2)
     system.add_orbiting_object(mars_system)
-    assert system.orbiting_objects_list() == "Orbiting objects in Test system: Earth, Mars, Mars system"
+    assert system.orbiting_objects_list() == "Orbiting Objects in Test system: Earth, Mars, Mars system"
 
 def test_orbital_system_get_orbital_period():
     """
