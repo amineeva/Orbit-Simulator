@@ -1,7 +1,7 @@
 # Creates orbit objects, runs orbital simulation
 
 import math
-GRAVITATIONAL_CONSTANT = 6.67408*10**(-11)/149597870691**3 #m^3/kgs^2 -> AU/kgs^2 
+GRAVITATIONAL_CONSTANT = 6.67408*10**(-11)/149597870691**3 #m^3/kgs^2 -> AU/kgs^2
 
 
 class SpaceObject:
@@ -27,7 +27,7 @@ class SpaceObject:
 
     def __repr__(self):
         return f"Name: {self.name}, radius: {self.radius} km, mass: {self.mass} kg, x start: {self.start_x}, y start: {self.start_y}, z start: {self.start_z}"
-    
+
     def get_name(self):
         """Returns name of the Space Object."""
         return self.name
@@ -39,11 +39,11 @@ class OrbitingObject(SpaceObject):
     Attributes:
         distance_from_center = Float representing semi-major axis in AU.
     """
-    
+
     def __init__(self, name, radius, mass, start_x, start_y, start_z, distance_from_center):
         super().__init__(name, radius, mass, start_x, start_y, start_z)
         self.distance_from_center = distance_from_center
-    
+
     def __repr__(self):
         return f"{super().__repr__()}, semi-major axis: {self.distance_from_center} AU"
 
@@ -81,7 +81,7 @@ class Planet(OrbitingObject):
         return f"{super().__repr__()}, planet type: {self.planet_type}"
 
 
-class Satellite(OrbitingObject): 
+class Satellite(OrbitingObject):
     """
     Representation of a space satellite. 
 
@@ -97,7 +97,7 @@ class Satellite(OrbitingObject):
 
     def __repr__(self):
         return f"{super().__repr__()}, lifetime: {self.lifetime} years, material: {self.material}"
-    
+
 
 class OrbitalSystem:
     """
@@ -112,11 +112,11 @@ class OrbitalSystem:
         """Initialize the system with a single central object and an empty dictionary of orbiting objects."""
         self.name = name
         self.central_object = central_object
-        self.orbiting_objects = {} 
-    
+        self.orbiting_objects = {}
+
     def __repr__(self):
         return f"System name: {self.name}, Central Object: {self.central_object}, Number of orbiting objects: {len(self.orbiting_objects)}"
-    
+
     def orbiting_objects_list(self):
         """Returns string of all orbiting objects in orbital system."""
         temp = []
@@ -126,7 +126,7 @@ class OrbitalSystem:
             return "There are no orbiting objects in the system."
         else:
             return f"Orbiting Objects in {self.name}: {', '.join(temp)}"
-    
+
     def add_orbiting_object(self, object):
         """Allows user to add orbiting objects to system"""
         if isinstance(self.central_object, Planet) and isinstance(object, Star): #first three if/elifs check for instance compatability
@@ -154,7 +154,7 @@ class OrbitalSystem:
                 self.orbiting_objects[object.name] = object
         else:
             self.orbiting_objects[object.name] = object
-    
+
     def get_orbital_period(self, object_name):
         """Returns the orbital period of an orbiting object in Earth years."""
         object = self.orbiting_objects.get(object_name)
@@ -164,12 +164,12 @@ class OrbitalSystem:
             period = math.sqrt( (object.distance_from_center**3*4*math.pi**2)/(GRAVITATIONAL_CONSTANT*(object.mass + self.central_object.mass)) ) /31536000
             return period
         elif isinstance(object, OrbitalSystem):
-            # take the period from the central object 
+            # take the period from the central object
             period = math.sqrt( (object.central_object.distance_from_center**3*4*math.pi**2)/(GRAVITATIONAL_CONSTANT*(object.central_object.mass + self.central_object.mass)) ) /31536000
             return period
         else:
             raise ValueError(f"Object {object_name} not found in system.")
-        
+
     def get_orbit_object_distance(self, object_name):
         """Returns the distance from the central object to the orbital object in AU."""
         object = self.orbiting_objects.get(object_name)
@@ -181,11 +181,11 @@ class OrbitalSystem:
             return object.central_object.distance_from_center
         else:
             raise ValueError(f"Object {object_name} not found in system.")
-        
+
     def get_central_object(self):
         """Returns the central object of the system"""
         return self.central_object
-    
+
 
 class PlanetaryOrbitalSystem(OrbitalSystem):
     """
@@ -200,14 +200,14 @@ class PlanetaryOrbitalSystem(OrbitalSystem):
         if not isinstance(planet, Planet):
             raise TypeError("The central object must be a Planet.")
         super().__init__(name, planet)
-        self.moons = {} 
+        self.moons = {}
         self.start_x = planet.start_x
         self.start_y = planet.start_y
         self.start_z = planet.start_z
 
     def __repr__(self):
         return f"System name: {self.name}, Central Object: {self.central_object}, Number of orbiting objects: {len(self.orbiting_objects)}"
-    
+
 
     def add_orbiting_object(self, object):
         """Allows user to add satellites to planetary system."""
@@ -222,7 +222,7 @@ class PlanetaryOrbitalSystem(OrbitalSystem):
             moon_distance = self.get_orbit_object_distance(name)
             moon_descriptions.append(f"{name} ({moon_distance} AU)")
         return f"Moons in {self.name}: {', '.join(moon_descriptions)}"
-    
+
 
 class StellarOrbitalSystem(OrbitalSystem):
     """
