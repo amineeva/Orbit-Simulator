@@ -29,8 +29,28 @@ import visualization
 
 # print(system.orbiting_objects_list())
 
-central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
-orbiting_object_1 = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
-system = OrbitalSystem("Test system", central_object)
-# system.add_orbiting_object(orbiting_object_1)
-print(system.get_orbital_period("Mars"))
+# central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+# orbiting_object_1 = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+# system = OrbitalSystem("Test system", central_object)
+# # system.add_orbiting_object(orbiting_object_1)
+# print(system.get_orbital_period("Mars"))
+
+
+# central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+# mars_planet = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+# orbiting_object = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+# phobos_moon = Satellite("Phobos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid") # creating Martian planet moons as satellite instances
+# deimos_moon = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+# mars_system = PlanetaryOrbitalSystem("Mars system", mars_planet) # creating Mars orbit system 
+# # mars_system.add_orbiting_object(phobos_moon)
+# # mars_system.add_orbiting_object(deimos_moon)
+# # print(mars_system.orbiting_objects_list())
+# orbiting_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+# # mars_system.add_orbiting_object(orbiting_object)
+
+
+central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+orbiting_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+system = PlanetaryOrbitalSystem("Test system", central_object)
+system.add_orbiting_object(orbiting_object)
+

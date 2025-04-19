@@ -158,7 +158,9 @@ class OrbitalSystem:
     def get_orbital_period(self, object_name):
         """Returns the orbital period of an orbiting object in Earth years."""
         object = self.orbiting_objects.get(object_name)
-        if isinstance(object, OrbitingObject):
+        if len(self.orbiting_objects) == 0:
+            return "There are no orbiting objects in the system."
+        elif isinstance(object, OrbitingObject):
             period = math.sqrt( (object.distance_from_center**3*4*math.pi**2)/(GRAVITATIONAL_CONSTANT*(object.mass + self.central_object.mass)) ) /31536000
             return period
         elif isinstance(object, OrbitalSystem):
@@ -177,6 +179,8 @@ class OrbitalSystem:
             return object.distance_from_center
         elif isinstance(object, PlanetaryOrbitalSystem):
             return object.central_object.distance_from_center
+        else:
+            raise ValueError(f"Object {object_name} not found in system.")
         
     def get_central_object(self):
         """Returns the central object of the system"""

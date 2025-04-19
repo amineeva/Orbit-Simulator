@@ -198,26 +198,138 @@ def test_orbital_system_get_orbital_period_no_orbiting_object():
     """
     central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
     system = OrbitalSystem("Test system", central_object)
+    assert system.get_orbital_period("Mars") == "There are no orbiting objects in the system."
+
+def test_orbital_system_get_orbit_object_distance_correct():
+    """
+    Check get_orbit_object_distance function for OrbitalSystem class, getting distance for object not in the orbiting list
+    """
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object_1 = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object_1)
+    assert system.get_orbit_object_distance("Earth") == 1.0
+
+def test_orbital_system_get_orbit_object_distance_invalid():
+    """
+    Check get_orbit_object_distance function for OrbitalSystem class, from an orbiting object
+    """
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    orbiting_object_1 = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object_1)
     with pytest.raises(ValueError, match="Object Mars not found in system."):
-        system.get_orbital_period("Mars")
+        system.get_orbit_object_distance("Mars")
 
-def test_orbital_system_get_orbit_object_distance():
+def test_orbital_system_get_orbit_object_distance_no_orbiting_objects():
     """
-    Check get_orbit_object_distance function for OrbitalSystem class
+    Check get_orbit_object_distance function for OrbitalSystem class - no orbiting objects in system
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    system = OrbitalSystem("Test system", central_object)
+    assert system.get_orbit_object_distance("Mars") == "There are no orbiting objects in the system."
 
-def test_orbital_system_get_central_object():
+def test_orbital_system_get_orbit_object_distance_system_orbiting():
+    """
+    Check get_orbit_object_distance function for OrbitalSystem class, system orbiting 
+    """
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    mars_planet = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    phobos_moon = Satellite("Phobos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid") # creating Martian planet moons as satellite instances
+    deimos_moon = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    mars_system = PlanetaryOrbitalSystem("Mars system", mars_planet) # creating Mars orbit system 
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(mars_system)
+    assert system.get_orbit_object_distance("Mars system") == 1.5
+
+def test_orbital_system_get_orbit_object_distance_system_orbiting_call_planet():
+    """
+    Check get_orbit_object_distance function for OrbitalSystem class, system orbiting calling the name of an object within orbiting system
+    """
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    mars_planet = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    phobos_moon = Satellite("Phobos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid") # creating Martian planet moons as satellite instances
+    deimos_moon = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    mars_system = PlanetaryOrbitalSystem("Mars system", mars_planet) # creating Mars orbit system 
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(mars_system)
+    with pytest.raises(ValueError, match="Object Mars not found in system."):
+        system.get_orbit_object_distance("Mars")
+    
+def test_orbital_system_get_central_object_one_planet():
     """
     Check get_central_object function for OrbitalSystem class
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    mars_planet = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(mars_planet)
+    assert system.get_central_object() == system.central_object
 
-def test_planetary_orbital_system_add_orbiting_object():
+def test_orbital_system_get_central_object_no_orbiting_objects():
     """
-    Check add_orbiting_object function for PlanetaryOrbitalSystem class
+    Check get_central_object function for OrbitalSystem class, no orbiting objects
     """
-    pass
+    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    mars_planet = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    system = OrbitalSystem("Test system", central_object)
+    assert system.get_central_object() == system.central_object
+
+def test_planetary_orbital_system_oneplanet_oneplanet():
+    """
+    Check add_orbiting_object function for PlanetaryOrbitalSystem class, one planet - one planet
+    """
+    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    orbiting_object = Planet("Earth", 6371, 5.972e24, 0, 0, 0, 1.0, "rocky")
+    system = PlanetaryOrbitalSystem("Test system", central_object)
+    
+    with pytest.raises(TypeError, match="The orbiting object must be a Satellite."):
+        system.add_orbiting_object(orbiting_object)
+
+def test_planetary_orbital_system_oneplanet_onestar():
+    """
+    Check add_orbiting_object function for PlanetaryOrbitalSystem class, one planet - one star
+    """
+    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    orbiting_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    system = PlanetaryOrbitalSystem("Test system", central_object)
+    
+    with pytest.raises(TypeError, match="The orbiting object must be a Satellite."):
+        system.add_orbiting_object(orbiting_object)
+
+def test_planetary_orbital_system_oneplanet_onestar():
+    """
+    Check add_orbiting_object function for PlanetaryOrbitalSystem class, one planet - one star
+    """
+    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    orbiting_object = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    system = PlanetaryOrbitalSystem("Test system", central_object)
+    
+    with pytest.raises(TypeError, match="The orbiting object must be a Satellite."):
+        system.add_orbiting_object(orbiting_object)
+
+def test_planetary_orbital_system_oneplanet_onesatellite():
+    """
+    Check that valid orbital system created with one central planet, one satellite orbiting
+    """
+    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    orbiting_object = Satellite("Deimos", 11, 0, 0, 0, 0, 0.00004011, 100, "asteroid")
+    system = OrbitalSystem("Test system", central_object)
+    system.add_orbiting_object(orbiting_object)
+
+    assert system.orbiting_objects_list() == "Moons in Mars system: Deimos (4.011e-05 AU)"
+
+def test_orb_sys_oneplanet_onestar():
+    """
+    Check that orbital system NOT created with one central planet, one star orbiting
+    """
+    # Define objects
+    central_object = Planet("Mars", 3390, 6.4191*10**23, 0, 0, 0, 1.5, "rocky")
+    orbiting_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
+    system = OrbitalSystem("Test system", central_object)
+    # Try the illegal thing
+    with pytest.raises(TypeError, match="A star cannot orbit a planet."):
+        system.add_orbiting_object(orbiting_object)
 
 def test_planetary_orbital_system_orbiting_objects_list():
     """
@@ -242,13 +354,3 @@ def test_add_same_object():
     system.add_orbiting_object(orbiting_object_1)
     result = system.add_orbiting_object(orbiting_object_2)
     assert result == "You already have an object with the same name in this system. Enter 1 to replace and 2 to cancel."
-
-def test_invalid_lookup():
-    """
-    Check that fake objects raise error
-    """
-    central_object = Star("Sun", 695700, 1.989e30, 0, 0, 0, 3.828e26, "O-type")
-    system = OrbitalSystem("Test system", central_object)
-    
-    with pytest.raises(ValueError, match = "Object FakePlanet not found in system."):
-        system.get_orbital_period("FakePlanet")
