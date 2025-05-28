@@ -1,5 +1,7 @@
 # Creates orbit objects, runs orbital simulation
 
+# test
+
 import math
 GRAVITATIONAL_CONSTANT = 6.67408*10**(-11)/149597870691**3 #m^3/kgs^2 -> AU/kgs^2
 
@@ -56,7 +58,7 @@ class Star(SpaceObject):
         luminosity: An int representing the luminosity of the star (Watts). Total amount of energy radiated per unit time. 
     """
 
-    def __init__(self, name, radius, mass, start_x, start_y, start_z, luminosity, spectral_type):
+    def __init__(self, name: str, radius, mass, start_x, start_y, start_z, luminosity, spectral_type):
         super().__init__(name, radius, mass, start_x, start_y, start_z)
         self.luminosity = luminosity
         self.spectral_type = spectral_type
